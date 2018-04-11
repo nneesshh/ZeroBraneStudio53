@@ -17,3 +17,5 @@ editor.autoactivate = true
 -- when debugging starts); some interpreters may use `true` or `false`
 -- by default, but can be still reconfigured with this setting.
 debugger.runonstart = true
+
+debugger.verbose = true

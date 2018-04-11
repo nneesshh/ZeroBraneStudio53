@@ -57,3 +57,5 @@ build/Win32/
 build/zbstudio\.dir/
 
 src/\.vscode/
+
+\.vscode/
