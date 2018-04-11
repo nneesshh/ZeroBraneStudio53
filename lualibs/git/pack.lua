@@ -2,7 +2,7 @@ local io = io
 local core = require 'git.core'
 
 local assert, pcall, print, select, setmetatable, string, type, unpack =
-	assert, pcall, print, select, setmetatable, string, type, unpack
+	assert, pcall, print, select, setmetatable, string, type, table.unpack or unpack
 
 local ord = string.byte
 local fmt = string.format

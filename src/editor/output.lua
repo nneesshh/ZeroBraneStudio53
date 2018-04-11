@@ -3,6 +3,7 @@
 -- Luxinia Dev (Eike Decker & Christoph Kubisch)
 ---------------------------------------------------------
 
+local unpack = table.unpack or unpack
 local ide = ide
 local frame = ide.frame
 local bottomnotebook = frame.bottomnotebook

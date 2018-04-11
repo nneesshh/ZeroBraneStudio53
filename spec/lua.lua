@@ -1,6 +1,8 @@
 -- authors: Luxinia Dev (Eike Decker & Christoph Kubisch)
 ---------------------------------------------------------
 
+local unpack = table.unpack or unpack
+
 local funcdef = "([A-Za-z_][A-Za-z0-9_%.%:]*)%s*"
 local decindent = {
   ['else'] = true, ['elseif'] = true, ['until'] = true, ['end'] = true}

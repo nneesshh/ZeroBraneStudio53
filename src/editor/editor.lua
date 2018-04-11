@@ -376,7 +376,7 @@ function EditorCallTip(editor, pos, x, y)
     -- only shorten if shown on mouse-over. Use shortcut to get full info.
     local showtooltip = ide.frame.menuBar:FindItem(ID_SHOWTOOLTIP)
     local suffix = "...\n"
-        ..TR("Use '%s' to see full description."):format(showtooltip:GetLabel())
+        ..TR("Use '%s' to see full description."):format(showtooltip:GetItemLabelText())
     if x and y and #tip > limit then
       tip = tip:sub(1, limit-#suffix):gsub("%W*%w*$","")..suffix
     end
@@ -681,8 +681,8 @@ function CreateEditor(bare)
   editor:SetTabWidth(tonumber(edcfg.tabwidth) or 2)
   editor:SetIndent(tonumber(edcfg.tabwidth) or 2)
   editor:SetUseTabs(edcfg.usetabs and true or false)
-  editor:SetIndentationGuides(tonumber(edcfg.indentguide) or (edcfg.indentguide and true or false))
-  editor:SetViewWhiteSpace(tonumber(edcfg.whitespace) or (edcfg.whitespace and true or false))
+  editor:SetIndentationGuides(tonumber(edcfg.indentguide) or (edcfg.indentguide and wxstc.wxSTC_IV_REAL or wxstc.wxSTC_IV_NONE))
+  editor:SetViewWhiteSpace(tonumber(edcfg.whitespace) or (edcfg.whitespace and wxstc.wxSTC_WS_VISIBLEALWAYS or wxstc.wxSTC_WS_INVISIBLE))
   editor:SetEndAtLastLine(edcfg.endatlastline and true or false)
 
   if (edcfg.usewrap) then

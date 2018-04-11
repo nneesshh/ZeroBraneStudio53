@@ -9,6 +9,7 @@ local notebook = frame.notebook
 local openDocuments = ide.openDocuments
 local uimgr = frame.uimgr
 local unpack = table.unpack or unpack
+local loadstring = loadstring or load
 
 local CURRENT_LINE_MARKER = StylesGetMarker("currentline")
 local CURRENT_LINE_MARKER_VALUE = 2^CURRENT_LINE_MARKER

@@ -19,6 +19,8 @@
 
 require 'checks'
 local gg = require 'metalua.grammar.generator'
+local unpack = table.unpack or unpack
+
 local M  = { }
 
 function M.opt(mlc, primary, a_type)

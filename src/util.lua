@@ -459,6 +459,8 @@ function LoadLuaFileExt(tab, file, proto)
   return tab
 end
 
+local loadstring = loadstring or load
+
 function LoadLuaConfig(filename,isstring)
   if not filename then return end
   -- skip those files that don't exist
@@ -475,7 +477,7 @@ function LoadLuaConfig(filename,isstring)
     ide:Print(("Error while loading configuration %s: '%s'."):format(msg, err))
   else
     setfenv(cfgfn,ide.config)
-    table.insert(ide.configqueue, (wx.wxFileName.SplitPath(filename)))
+    table.insert(ide.configqueue, (wx.wxFileName().SplitPath(filename)))
     local _, err = pcall(function()cfgfn(assert(_G or _ENV))end)
     table.remove(ide.configqueue)
     if err then
@@ -490,13 +492,14 @@ function LoadSafe(data)
   if not f then return f, res end
 
   local count = 0
-  debug.sethook(function ()
+  local hook = function ()
     count = count + 1
     if count >= 3 then error("cannot call functions") end
-  end, "c")
+  end
+  --debug.sethook(hook, "c")
   local ok, res = pcall(f)
   count = 0
-  debug.sethook()
+  --debug.sethook()
   return ok, res
 end
 

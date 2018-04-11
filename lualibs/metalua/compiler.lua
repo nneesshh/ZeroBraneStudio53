@@ -39,6 +39,7 @@
 --------------------------------------------------------------------------------
 
 require 'checks'
+local unpack = table.unpack or unpack
 
 local M  = { }
 

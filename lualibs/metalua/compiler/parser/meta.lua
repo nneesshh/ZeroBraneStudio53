@@ -20,7 +20,8 @@
 -- Compile-time metaprogramming features: splicing ASTs generated during compilation,
 -- AST quasi-quoting helpers.
 
-local gg       = require 'metalua.grammar.generator'
+local unpack = table.unpack or unpack
+local gg     = require 'metalua.grammar.generator'
 
 return function(M)
     local _M = gg.future(M)

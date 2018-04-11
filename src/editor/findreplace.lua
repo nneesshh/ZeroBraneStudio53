@@ -572,7 +572,7 @@ function findReplace:RunInFiles(replace)
       nb:AddPage(reseditor, previewText, true)
     end
     reseditor:SetWrapMode(wxstc.wxSTC_WRAP_NONE)
-    reseditor:SetIndentationGuides(false)
+    reseditor:SetIndentationGuides(wxstc.wxSTC_IV_NONE)
     if tonumber(ide.config.search.zoom) then
       reseditor:SetZoom(tonumber(ide.config.search.zoom))
     end

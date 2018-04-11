@@ -36,8 +36,9 @@
 --
 --------------------------------------------------------------------------------
 
-local pp       = require 'metalua.pprint'
-local gg       = require 'metalua.grammar.generator'
+local unpack = table.unpack or unpack
+local pp     = require 'metalua.pprint'
+local gg     = require 'metalua.grammar.generator'
 
 -- TODO: replace splice-aware versions with naive ones, move etensions in ./meta
 

@@ -23,18 +23,19 @@ typedef int *varfunc (void *L,...); // quick and dirty using the varargs
 typedef void varfuncvoid (void *L,...);
 
 // from lua.h
-#define LUA_GLOBALSINDEX	(-10002)
+//#define LUA_GLOBALSINDEX	(-10002)
 
 static voidfunc *luaL_newstate;
-static varfunc *luaL_loadbuffer;
+static varfunc *luaL_loadbufferx;
 static varfunc *luaL_openlibs;
-static varfunc *lua_pcall;
+static varfunc *lua_pcallk;
 static varfunc *lua_pushcclosure;
 static varfunc *lua_setfield;
 static varfunc *lua_tolstring;
 static varfuncvoid *lua_createtable;
 static varfuncvoid *lua_pushstring;
 static varfuncvoid *lua_rawseti;
+static varfuncvoid *lua_setglobal;
 
 static int luafunc_mbox (void *L)
 {
@@ -45,12 +46,13 @@ static int luafunc_mbox (void *L)
 }
 
 static const char *luacode =
-"local msg = _ERRMSG; _ERRMSG = nil "
-"local arg = _ARG or {}; _ARG = nil "
+"local msg = _ERRMSG; _ERRMSG = nil; "
+"local arg = _ARG or {}; _ARG = nil; "
+"local unpack = table.unpack or unpack; "
 "xpcall("
 "function() "
-"(loadfile 'src/main.lua')(unpack(arg)) end,"
-"function(err) msg('Uncaught lua script exception',debug.traceback(err)) end)"
+"(loadfile 'src/main53.lua')(unpack(arg));_ERRMSG('info','xpcall over.'); end,"
+"function(err) print(err);msg('Uncaught lua script exception',debug.traceback(err)) end)"
 ;
 
 PCHAR* CommandLineToArgv(PCHAR CmdLine,int* _argc)
@@ -167,23 +169,26 @@ int WINAPI WinMain(HINSTANCE hInstance,  HINSTANCE hPrevInstance,  LPSTR lpCmdLi
 
   SetCurrentDirectory(buffer);
 
-  hinstLib = LoadLibrary(".\\bin\\lua51.dll");
+  hinstLib = LoadLibrary(".\\bin\\lua53.dll");
   if (hinstLib != NULL) {
     luaL_newstate = (voidfunc*) GetProcAddress(hinstLib, "luaL_newstate");
-    luaL_loadbuffer = (varfunc*) GetProcAddress(hinstLib, "luaL_loadbuffer");
+    //luaL_loadbuffer = (varfunc*) GetProcAddress(hinstLib, "luaL_loadbuffer");
+	luaL_loadbufferx = (varfunc*)GetProcAddress(hinstLib, "luaL_loadbufferx");
     luaL_openlibs = (varfunc*) GetProcAddress(hinstLib, "luaL_openlibs");
-    lua_pcall = (varfunc*)GetProcAddress(hinstLib, "lua_pcall");
+    //lua_pcall = (varfunc*)GetProcAddress(hinstLib, "lua_pcall");
+	lua_pcallk = (varfunc*)GetProcAddress(hinstLib, "lua_pcallk");
     lua_tolstring = (varfunc*)GetProcAddress(hinstLib, "lua_tolstring");
     lua_setfield = (varfunc*)GetProcAddress(hinstLib, "lua_setfield");
     lua_pushcclosure = (varfunc*)GetProcAddress(hinstLib, "lua_pushcclosure");
     lua_createtable = (varfuncvoid*)GetProcAddress(hinstLib, "lua_createtable");
     lua_pushstring = (varfuncvoid*)GetProcAddress(hinstLib, "lua_pushstring");
     lua_rawseti = (varfuncvoid*)GetProcAddress(hinstLib, "lua_rawseti");
+	lua_setglobal = (varfuncvoid*)GetProcAddress(hinstLib, "lua_setglobal");
     // If the function address is valid, call the function.
 
-    if (luaL_newstate && luaL_loadbuffer && luaL_openlibs && lua_pcall &&
+    if (luaL_newstate && luaL_loadbufferx && luaL_openlibs && lua_pcallk &&
       lua_pushcclosure && lua_setfield && lua_tolstring &&
-      lua_createtable && lua_pushstring && lua_rawseti)
+      lua_createtable && lua_pushstring && lua_rawseti && lua_setglobal)
     {
       // OK, I don't do any error checking here, which COULD
       // lead to bugs that are hard to find, but considered the simplicity
@@ -204,12 +209,14 @@ int WINAPI WinMain(HINSTANCE hInstance,  HINSTANCE hPrevInstance,  LPSTR lpCmdLi
           lua_pushstring(L,argv[i]);
           lua_rawseti(L,-2,i+3);
         }
-        lua_setfield(L,LUA_GLOBALSINDEX,"_ARG");
+		//lua_setfield(L, LUA_GLOBALSINDEX, "_ARG");
+		lua_setglobal(L, "_ARG");
         luaL_openlibs(L);
         lua_pushcclosure(L,luafunc_mbox,0);
-        lua_setfield(L,LUA_GLOBALSINDEX,"_ERRMSG");
-        if (luaL_loadbuffer(L,luacode,strlen(luacode),"Initializer") == 0)
-          lua_pcall(L,0,0,0);
+		//lua_setfield(L, LUA_GLOBALSINDEX, "_ERRMSG");
+		lua_setglobal(L, "_ERRMSG");
+        if (luaL_loadbufferx(L,luacode,strlen(luacode),"Initializer", NULL) == 0)
+          lua_pcallk(L,0,0,0,0,NULL);
         else
           MessageBox(NULL,
             TEXT("An unexpected error occured while loading the lua chunk."),
@@ -222,7 +229,7 @@ int WINAPI WinMain(HINSTANCE hInstance,  HINSTANCE hPrevInstance,  LPSTR lpCmdLi
           MB_OK|MB_ICONERROR);
     } else {
       MessageBox(NULL,
-        TEXT("Could not load all functions that are supposed to be located in lua51.dll."),
+        TEXT("Could not load all functions that are supposed to be located in luacore53.dll."),
         TEXT("Failed to start editor"),
         MB_OK|MB_ICONERROR);
     }
@@ -231,7 +238,7 @@ int WINAPI WinMain(HINSTANCE hInstance,  HINSTANCE hPrevInstance,  LPSTR lpCmdLi
     FreeLibrary(hinstLib);
   } else {
     MessageBox(NULL,
-      TEXT("lua51.dll could not be found or loaded, please check the working directory of the application."),
+      TEXT("luacore53.dll could not be found or loaded, please check the working directory of the application."),
       TEXT("Failed to initialize editor"),
       MB_OK|MB_ICONERROR);
   }

@@ -2,7 +2,8 @@
 -- authors: Luxinia Dev (Eike Decker & Christoph Kubisch)
 ---------------------------------------------------------
 
-local ide = ide
+local unpack = table.unpack or unpack
+local ide    = ide
 
 ide.filetree = {
   projdir = "",

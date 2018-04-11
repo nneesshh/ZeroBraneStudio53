@@ -463,12 +463,12 @@ function ide:CreateStyledTextCtrl(...)
     end
   end
 
-  if not editor.ReplaceTargetRaw then
+  --if not editor.ReplaceTargetRaw then
     editor.ReplaceTargetRaw = function(self, ...)
       self:ReplaceTarget("")
       self:InsertTextDyn(self:GetTargetStart(), ...)
     end
-  end
+  --end
 
   -- map all `GetTextDyn` to `GetText` or `GetTextRaw` if `*Raw` methods are present
   editor.useraw = useraw

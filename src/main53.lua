@@ -29,9 +29,9 @@ if islinux then
 end
 
 package.cpath = (
-  iswindows and 'bin/clibs/?.dll;' or
-  islinux and ('bin/linux/%s/clibs/lib?.so;bin/linux/%s/clibs/?.so;'):format(arch,arch) or
-  --[[isosx]] 'bin/clibs/lib?.dylib;bin/clibs/?.dylib;')
+  iswindows and 'bin/clibs53/?.dll;' or
+  islinux and ('bin/linux/%s/clibs53/lib?.so;bin/linux/%s/clibs53/?.so;'):format(arch,arch) or
+  --[[isosx]] 'bin/clibs53/lib?.dylib;bin/clibs53/?.dylib;')
     .. package.cpath
 package.path  = 'lualibs/?.lua;lualibs/?/?.lua;lualibs/?/init.lua;' .. package.path
 
@@ -278,13 +278,13 @@ local function setLuaPaths(mainpath, osname)
       :gsub('LUA_DEV', (luadev:gsub('[\\/]$','')))
     or nil)
   local luadev_cpath = (luadev
-    and ('LUA_DEV/?.dll;LUA_DEV/?51.dll;LUA_DEV/clibs/?.dll;LUA_DEV/clibs/?51.dll')
+    and ('LUA_DEV/?.dll;LUA_DEV/?51.dll;LUA_DEV/clibs53/?.dll;LUA_DEV/clibs53/?51.dll')
       :gsub('LUA_DEV', (luadev:gsub('[\\/]$','')))
     or nil)
 
   if luadev then
-    local path, clibs = os.getenv('PATH'), luadev:gsub('[\\/]$','')..'\\clibs'
-    if not path:find(clibs, 1, true) then wx.wxSetEnv('PATH', path..';'..clibs) end
+    local path, clibs53 = os.getenv('PATH'), luadev:gsub('[\\/]$','')..'\\clibs53'
+    if not path:find(clibs53, 1, true) then wx.wxSetEnv('PATH', path..';'..clibs53) end
   end
 
   -- (luaconf.h) in Windows, any exclamation mark ('!') in the path is replaced
@@ -303,17 +303,17 @@ local function setLuaPaths(mainpath, osname)
     .. mainpath.."lualibs/?/?/init.lua;"..mainpath.."lualibs/?/init.lua"
     .. (luadev_path and (';' .. luadev_path) or ''))
 
-  ide.osclibs = -- keep the list to use for various Lua versions
+  ide.osclibs53 = -- keep the list to use for various Lua versions
     osname == "Windows" and table.concat({
-        mainpath.."bin/clibs/?.dll",
+        mainpath.."bin/clibs53/?.dll",
       },";") or
     osname == "Macintosh" and table.concat({
-        mainpath.."bin/clibs/?.dylib",
-        mainpath.."bin/clibs/lib?.dylib",
+        mainpath.."bin/clibs53/?.dylib",
+        mainpath.."bin/clibs53/lib?.dylib",
       },";") or
     osname == "Unix" and table.concat({
-        mainpath..("bin/linux/%s/clibs/?.so"):format(arch),
-        mainpath..("bin/linux/%s/clibs/lib?.so"):format(arch),
+        mainpath..("bin/linux/%s/clibs53/?.so"):format(arch),
+        mainpath..("bin/linux/%s/clibs53/lib?.so"):format(arch),
       },";") or
     assert(false, "Unexpected OS name")
 
@@ -324,7 +324,7 @@ local function setLuaPaths(mainpath, osname)
       },";")
 
   wx.wxSetEnv("LUA_CPATH",
-    (os.getenv("LUA_CPATH") or ';') .. ';' .. ide.osclibs
+    (os.getenv("LUA_CPATH") or ';') .. ';' .. ide.osclibs53
     .. (luadev_cpath and (';' .. luadev_cpath) or ''))
 
   -- on some OSX versions, PATH is sanitized to not include even /usr/local/bin; add it

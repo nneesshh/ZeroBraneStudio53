@@ -28,7 +28,7 @@ M.global_signatures = {
   tonumber = "tonumber (e [, base])",
   tostring = "tostring (e)",
   type = "type (v)",
-  unpack = "unpack (list [, i [, j]])",
+  unpack = "table.unpack (list [, i [, j]])",
   _VERSION = "(string)",
   xpcall = "xpcall (f, err)",
   module = "module (name [, ...])",
@@ -173,7 +173,7 @@ M.argument_counts = {
   [ipairs] = {1,1},
   [load] = {1,2},
   [loadfile] = {0,1},
-  [loadstring] = {1,2},
+  --[loadstring] = {1,2},
   [next] = {1,2},
   [pairs] = {1,1},
   [pcall] = {1,math.huge},
@@ -187,9 +187,9 @@ M.argument_counts = {
   [tonumber] = {1,2},
   [tostring] = {1},
   [type] = {1},
-  [unpack] = {1,3},
+  --[unpack] = {1,3},
   [xpcall] = {2,2},
-  [module] = {1,math.huge},
+  --[module] = {1,math.huge},
   [require] = {1,1},
   [coroutine.create] = {1,1},
   [coroutine.resume] = {1, math.huge},
@@ -226,30 +226,30 @@ M.argument_counts = {
   [math.acos] = {1},
   [math.asin] = {1},
   [math.atan] = {1},
-  [math.atan2] = {2,2},
+  --[math.atan2] = {2,2},
   [math.ceil] = {1,1},
   [math.cos] = {1,1},
-  [math.cosh] = {1,1},
+  --[math.cosh] = {1,1},
   [math.deg] = {1,1},
   [math.exp] = {1,1},
   [math.floor] = {1,1},
   [math.fmod] = {2,2},
-  [math.frexp] = {1,1},
-  [math.ldexp] = {2,2},
+  --[math.frexp] = {1,1},
+  --[math.ldexp] = {2,2},
   [math.log] = {1,1},
-  [math.log10] = {1,1},
+  --[math.log10] = {1,1},
   [math.max] = {1,math.huge},
   [math.min] = {1,math.huge},
   [math.modf] = {1,1},
-  [math.pow] = {2,2},
+  --[math.pow] = {2,2},
   [math.rad] = {1,1},
   [math.random] = {0,2},
   [math.randomseed] = {1,1},
   [math.sin] = {1,1},
-  [math.sinh] = {1,1},
+  --[math.sinh] = {1,1},
   [math.sqrt] = {1,1},
   [math.tan] = {1,1},
-  [math.tanh] = {1,1},
+  --[math.tanh] = {1,1},
   [os.clock] = {0,0},
   [os.date] = {0,2},
   [os.difftime] = {2,2},
@@ -262,7 +262,7 @@ M.argument_counts = {
   [os.time] = {0,1},
   [os.tmpname] = {0,0},
   [package.loadlib] = {2,2},
-  [package.seeall] = {1,1},
+  --[package.seeall] = {1,1},
   [string.byte] = {1,3},
   [string.char] = {0,math.huge},
   [string.dump] = {1,1},
@@ -277,9 +277,10 @@ M.argument_counts = {
   [string.reverse] = {1,1},
   [string.sub] = {2,3},
   [string.upper] = {1,1},
+  [table.unpack] = {1,3},
   [table.concat] = {1,4},
   [table.insert] = {2,3},
-  [table.maxn] = {1,1},
+  --[table.maxn] = {1,1},
   [table.remove] = {1,2},
   [table.sort] = {1,2},
   [false] = nil -- trick (relies on potentially undefined behavior)
@@ -296,7 +297,7 @@ M.safe_function = {
   [tonumber] = true,
   [tostring] = true,
   [type] = true,
-  [unpack] = true,
+  --[unpack] = true,
   [coroutine.create] = true,
   -- [coroutine.resume]
   [coroutine.running] = true,
@@ -323,30 +324,30 @@ M.safe_function = {
   [math.acos] = true,
   [math.asin] = true,
   [math.atan] = true,
-  [math.atan2] = true,
+  --[math.atan2] = true,
   [math.ceil] = true,
   [math.cos] = true,
-  [math.cosh] = true,
+  --[math.cosh] = true,
   [math.deg] = true,
   [math.exp] = true,
   [math.floor] = true,
   [math.fmod] = true,
-  [math.frexp] = true,
-  [math.ldexp] = true,
+  --[math.frexp] = true,
+  --[math.ldexp] = true,
   [math.log] = true,
-  [math.log10] = true,
+  --[math.log10] = true,
   [math.max] = true,
   [math.min] = true,
   [math.modf] = true,
-  [math.pow] = true,
+  --[math.pow] = true,
   [math.rad] = true,
   --[math.random]
   --[math.randomseed]
   [math.sin] = true,
-  [math.sinh] = true,
+  --[math.sinh] = true,
   [math.sqrt] = true,
   [math.tan] = true,
-  [math.tanh] = true,
+  --[math.tanh] = true,
   [os.clock] = true, -- safe but non-deterministic
   [os.date]  = true,-- safe but non-deterministic
   [os.difftime] = true,
@@ -372,7 +373,8 @@ M.safe_function = {
   [string.reverse] = true,
   [string.sub] = true,
   [string.upper] = true,
-  [table.maxn] = true,
+  [table.unpack] = true,
+  --[table.maxn] = true,
 }
 
 M.mock_functions = {}
@@ -406,28 +408,28 @@ mockfunction(math.atan, {'N',-math.huge,math.huge}, '->',
 --FIX atan2
 mockfunction(math.ceil, 'N','->','I')
 mockfunction(math.cos, 'N','->',{'N',-1,1})
-mockfunction(math.cosh, 'N','->',{'N',1,math.huge})
+--mockfunction(math.cosh, 'N','->',{'N',1,math.huge})
 mockfunction(math.deg, 'N','->','N')
 mockfunction(math.exp, 'N','->',{'N',0,math.huge})
 mockfunction(math.floor, 'N','->','I')
 mockfunction(math.fmod, 'N','N','->','N')
-mockfunction(math.frexp, 'N','->',{'N',-1,1},'->','I')
-mockfunction(math.ldexp, {'N','I'},'->','N')
+--mockfunction(math.frexp, 'N','->',{'N',-1,1},'->','I')
+--mockfunction(math.ldexp, {'N','I'},'->','N')
 mockfunction(math.log, {'N',0,math.huge},'->','N')
-mockfunction(math.log10, {'N',0,math.huge},'->','N')
+--mockfunction(math.log10, {'N',0,math.huge},'->','N')
 -- function max(...) print 'NOT IMPL'end
 -- function min(...) print 'NOT IMPL'end
 mockfunction(math.modf, 'N','->','I',{'N',-1,1})
 
-mockfunction(math.pow, 'N','N','->','N') -- improve?
+--mockfunction(math.pow, 'N','N','->','N') -- improve?
 mockfunction(math.rad, 'N','->','N')
 -- random = function() print 'NOT IMPL' end
 mockfunction(math.randomseed, 'N')
 mockfunction(math.sin, 'N','->',{'N',-1,1})
-mockfunction(math.sinh, 'N','->','N')
+--mockfunction(math.sinh, 'N','->','N')
 mockfunction(math.sqrt, {'N',0,math.huge},'->',{'N',0,math.huge})
 mockfunction(math.tan, 'N','->','N') -- improve?
-mockfunction(math.tanh, 'N','->',{'N',-1,1})
+--mockfunction(math.tanh, 'N','->',{'N',-1,1})
 
 
 return M

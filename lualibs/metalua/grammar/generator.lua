@@ -46,8 +46,9 @@
 
 local M = { }
 
-local pp    = require 'metalua.pprint'
-local lexer = require 'metalua.grammar.lexer'
+local unpack = table.unpack or unpack
+local pp     = require 'metalua.pprint'
+local lexer  = require 'metalua.grammar.lexer'
 
 --------------------------------------------------------------------------------
 -- Symbol generator: [gensym()] returns a guaranteed-to-be-unique identifier.

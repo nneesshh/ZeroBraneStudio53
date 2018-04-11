@@ -3,6 +3,7 @@ local core = require 'git.core'
 local deflate = core.deflate
 local inflate = core.inflate
 local sha = core.sha
+local unpack = table.unpack or unpack
 
 module(..., package.seeall)
 

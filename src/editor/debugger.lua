@@ -770,6 +770,9 @@ function debugger:Listen(start)
           -- a remote call; try to map it to the project folder.
           -- also check for absolute path as it may need to be remapped
           -- when autoactivation is disabled.
+          local bExists = wx.wxFileName(file):FileExists()
+          local bAbsolutePath = wx.wxIsAbsolutePath(file)
+          local cwdPath =wx.wxFileName().GetCwd()
           if not activated and (not wx.wxFileName(file):FileExists()
                                 or wx.wxIsAbsolutePath(file)) then
             if debugger:mapRemotePath(basedir, file, line, activate.NOREPORT) then

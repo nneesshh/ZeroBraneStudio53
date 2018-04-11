@@ -16,8 +16,8 @@
 --     Fabien Fleutot - API and implementation
 --
 --------------------------------------------------------------------------------
-
-local gg    = require 'metalua.grammar.generator'
+local unpack = table.unpack or unpack
+local gg     = require 'metalua.grammar.generator'
 
 return function(M)
     local _M = gg.future(M)
