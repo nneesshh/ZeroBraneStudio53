@@ -45,3 +45,15 @@ luac.out
 *.ilk
 
 *.pdb
+
+build/\.vs/
+
+build/CMakeFiles/
+
+build/Debug/
+
+build/Win32/
+
+build/zbstudio\.dir/
+
+src/\.vscode/
