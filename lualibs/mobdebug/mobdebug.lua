@@ -1512,6 +1512,7 @@ local function handle(params, client, options)
       end
       local ok, stack = pcall(func)
       if not ok then
+        print("================================")
         print("Error in stack information: " .. stack)
         return nil, nil, stack
       end
