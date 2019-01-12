@@ -745,6 +745,11 @@ function debugger:Listen(start)
             ..":\n"..err)
           return debugger:terminate()
         elseif runstart then
+          
+          local bExists = wx.wxFileName(file):FileExists()
+          local bAbsolutePath = wx.wxIsAbsolutePath(file)
+          local cwdPath =wx.wxFileName().GetCwd()
+
           local file = (debugger:mapRemotePath(basedir, file, line or 0, activate.CHECKONLY)
             or file or startfile)
 
@@ -753,6 +758,10 @@ function debugger:Listen(start)
             runstart = false
           end
         elseif file and line then
+          local bExists = wx.wxFileName(file):FileExists()
+          local bAbsolutePath = wx.wxIsAbsolutePath(file)
+          local cwdPath =wx.wxFileName().GetCwd()
+
           local activated = debugger:ActivateDocument(file, line, activate.NOREPORT)
 
           -- if not found, check using full file path and reset basedir
@@ -770,9 +779,6 @@ function debugger:Listen(start)
           -- a remote call; try to map it to the project folder.
           -- also check for absolute path as it may need to be remapped
           -- when autoactivation is disabled.
-          local bExists = wx.wxFileName(file):FileExists()
-          local bAbsolutePath = wx.wxIsAbsolutePath(file)
-          local cwdPath =wx.wxFileName().GetCwd()
           if not activated and (not wx.wxFileName(file):FileExists()
                                 or wx.wxIsAbsolutePath(file)) then
             if debugger:mapRemotePath(basedir, file, line, activate.NOREPORT) then
